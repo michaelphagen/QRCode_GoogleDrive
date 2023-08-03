@@ -1,0 +1,48 @@
+<script>
+    function preventFormSubmit() {
+          var forms = document.querySelectorAll('form');
+          for (var i = 0; i < forms.length; i++) {
+            forms[i].addEventListener('submit', function(event) {
+              event.preventDefault();
+            });
+          }
+        }
+    window.addEventListener('load', preventFormSubmit);
+  
+    function handleFormSubmit(formObject){
+      toggleLoader(true);
+      google.script.run.withSuccessHandler(updateUrl).withFailureHandler(onFailure).formSubmit(formObject);
+    }
+  
+    function updateUrl(response) {
+      var div = document.getElementById('output');
+      if (response="File uploaded successfully"){
+        div.innerHTML = '<div class="alert alert-success" role="alert">' + response + '</div>';
+        toggleLoader(false);
+        document.getElementById("myForm").reset();
+      }else{
+        //Show warning message if file is not uploaded or provided
+        div.innerHTML = '<div class="alert alert-danger" role="alert">'+ url +'!</div>';
+      }
+    }
+  
+    function onFailure(error) {
+      var div = document.getElementById('output');
+      div.innerHTML = '<div class="alert alert-danger" role="alert">'+ error.message +'!</div>';
+    }
+  
+    function isValidURL(string) {
+      var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+      return (res !== null);
+    }
+
+    function toggleLoader(on) {
+        if(on){
+            document.getElementById("loader").style.display = "block";
+            document.getElementById("output").style.display = "none";
+        } else {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("output").style.display = "block";
+    }
+}
+  </script>
