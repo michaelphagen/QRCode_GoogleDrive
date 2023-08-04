@@ -31,21 +31,6 @@ function include(filename) {
         .getContent();
     }
 
-function getRoot() {
-    // If rootFolder is blank, create a folder called QRCode_GoogleDrive in root
-    if (rootFolder == "") {
-        // Checking if QRCode_GoogleDrive folder already exists and if not, creating it
-        var folders = DriveApp.getFoldersByName("QRCode_GoogleDrive");
-        if (folders.hasNext()) {
-            rootFolder = folders.next().getId();
-        }
-        else {
-            rootFolder = DriveApp.createFolder("QRCode_GoogleDrive").getId();
-        }
-    }
-    return DriveApp.getFolderById(rootFolder);
-}
-
 function structure() {
     // Create the following structure:
     // Root
@@ -59,8 +44,12 @@ function structure() {
     // - - ID3.png (etc.)
     // - Sheet
 
-    // Get Root
-    var root = getRoot();
+    // Get rootFolder from environment variable (properties service)
+    var rootFolderID = PropertiesService.getScriptProperties().getProperty('rootFolderID');
+    // If rootFolderID isn't specified, use root directory of google drive
+    if (rootFolderID == null) {
+        rootFolderID = DriveApp.getRootFolder();
+    }
     // Create Files folder if it doesn't exist
     var filesFolder = root.getFoldersByName("Files");
     if (filesFolder.hasNext()) {
