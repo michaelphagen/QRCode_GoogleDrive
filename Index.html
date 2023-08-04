@@ -49,11 +49,14 @@
   <head>
     <base target="_top">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
-    <?!= include('JavaScript'); ?>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <?!= include('clientsideJS'); ?>
   </head>
   <body onload="toggleLoader(false)">
     <form id="myForm" onsubmit="handleFormSubmit(this)">
-      <input name="id" type="text" placeholder="id" required>
+      <div class="container">
+      <h2>You are submitting a file for ID: <?= id; ?></h2>
+      <input type="hidden" name="id" value=<?= id; ?>>
       <br/>
       <input name="myFile" class="form-control-file" type="file" id="FormControlFile" />
       <br/>

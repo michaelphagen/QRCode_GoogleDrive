@@ -6,19 +6,20 @@
 // Google Sheets API
 // Google QR Code API
 
-
-// While this is working, it would probably be better if it used unique URLS instead of IDs
-
-function doGet() {
-    return HtmlService
-        .createTemplateFromFile('Index')
-        .evaluate();
+function doGet(e) {
+    var code = e.parameter["afs"]
+    if (e.parameter["afs"]){
+      html=HtmlService.createTemplateFromFile('Index')
+      html.id = Utilities.newBlob(Utilities.base64Decode(e.parameter["afs"])).getDataAsString();
+      console.log(html.id)
+    return html.evaluate();
+    }
   }
 
 function formSubmit(form) {
 if (form.myFile.length > 0) {
     var file = form.myFile;
-    var id = form.id;
+    var id=form.id;
     return upload(id, file);
     }
 else {
@@ -48,7 +49,10 @@ function structure() {
     var rootFolderID = PropertiesService.getScriptProperties().getProperty('rootFolderID');
     // If rootFolderID isn't specified, use root directory of google drive
     if (rootFolderID == null) {
-        rootFolderID = DriveApp.getRootFolder();
+        root = DriveApp.getRootFolder();
+    }
+    else {
+        root = DriveApp.getFolderById(rootFolderID);
     }
     // Create Files folder if it doesn't exist
     var filesFolder = root.getFoldersByName("Files");
