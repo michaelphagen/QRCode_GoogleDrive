@@ -7,11 +7,9 @@
 // Google QR Code API
 
 function doGet(e) {
-    var code = e.parameter["afs"]
     if (e.parameter["afs"]){
       html=HtmlService.createTemplateFromFile('Index')
       html.id = Utilities.newBlob(Utilities.base64Decode(e.parameter["afs"])).getDataAsString();
-      console.log(html.id)
     return html.evaluate();
     }
   }
